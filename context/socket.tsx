@@ -20,7 +20,7 @@ export const SocketProvider = (props: any) => {
 
     socket?.on('connect_error', async (err: Error) => {
         console.log('Error establishing socket', err)
-        await fetch('/api/socket.tsx')
+        await fetch('/api/socket')
     })
 
     return (
