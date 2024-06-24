@@ -39,6 +39,16 @@ const SocketHandler = (req: any, res: any) => {
                 socket.join(roomId);
                 socket.broadcast.to(roomId).emit('user-leave-room', userId);
             })
+
+            socket.on('disconnect', (userId, roomId) => {
+                console.log('user disconnected');
+                socket.join(roomId);
+                socket.broadcast.to(roomId).emit('user-leave-room', userId);
+            });
+        });
+
+        io.on('disconnect', (socket) => {
+            console.log('server is disconnected');
         });
     }
 

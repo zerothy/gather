@@ -16,9 +16,24 @@ const Room = () => {
     const { roomId } = useRouter().query;
     const { peer, myId } = usePeer();
     const { stream } = useMediaStream();
-    const { players, setPlayers, toggleAudio, toggleVideo, playerHighlighted, nonHighlightedPlayers, leaveRoom } = usePlayer(myId, roomId, peer);
+    const { players, setPlayers, toggleAudio, toggleVideo, playerHighlighted, nonHighlightedPlayers, leaveRoom } = usePlayer(myId, roomId, peer, stream);
 
     const [users, setUsers] = useState<any>([])
+
+    useEffect(() => {
+        const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+            leaveRoom()
+            event.preventDefault();
+
+            event.returnValue = 'Are you sure you want to leave?';
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [leaveRoom])
 
     useEffect(() => {
         if(!socket || !peer || !stream) return;

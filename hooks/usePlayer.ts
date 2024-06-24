@@ -4,7 +4,7 @@ import { useRouter } from "next/router"
 import { useSocket } from "@/context/socket"
 import { cloneDeep } from "lodash"
 
-const usePlayer = (myId: any, roomId: any, peer: any) => {
+const usePlayer = (myId: any, roomId: any, peer: any, stream: any) => {
     const socket = useSocket()
     const router = useRouter()
     const [players, setPlayers] = useState<any>({})
@@ -20,6 +20,13 @@ const usePlayer = (myId: any, roomId: any, peer: any) => {
             console.log('Acknowledgement from server for leaveRoom:', response);
         });
         console.log("leave the room", roomId)
+
+        if(stream){
+            stream.getTracks().forEach((track: any) => {
+                // console.log("stopping track", track)
+                track.stop()
+            })
+        }
 
         peer?.disconnect()
 
