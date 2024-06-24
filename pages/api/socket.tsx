@@ -33,6 +33,12 @@ const SocketHandler = (req: any, res: any) => {
                 socket.join(roomId);
                 socket.broadcast.to(roomId).emit('user-toggle-video', userId);
             })
+
+            socket.on('user-leave-room', (userId, roomId) => {
+                console.log(`User ${userId} left room ${roomId}`);
+                socket.join(roomId);
+                socket.broadcast.to(roomId).emit('user-leave-room', userId);
+            })
         });
     }
 

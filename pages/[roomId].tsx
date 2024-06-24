@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSocket } from "@/context/socket";
 
@@ -16,7 +16,9 @@ const Room = () => {
     const { roomId } = useRouter().query;
     const { peer, myId } = usePeer();
     const { stream } = useMediaStream();
-    const { players, setPlayers, toggleAudio, toggleVideo, playerHighlighted, nonHighlightedPlayers } = usePlayer(myId, roomId);
+    const { players, setPlayers, toggleAudio, toggleVideo, playerHighlighted, nonHighlightedPlayers, leaveRoom } = usePlayer(myId, roomId, peer);
+
+    const [users, setUsers] = useState<any>([])
 
     useEffect(() => {
         if(!socket || !peer || !stream) return;
@@ -38,6 +40,11 @@ const Room = () => {
                     }
                 }))
             })
+
+            setUsers((prev: any) => ({
+                ...prev,
+                [newUser]: call
+            }))
         } 
         socket.on('user-connected', handleUserConnected)
 
@@ -66,14 +73,26 @@ const Room = () => {
             })
         }
 
+        const handleUserLeaveRoom = (userId: any) => {
+            console.log("User left room", userId)
+            users[userId]?.close()
+            setPlayers((prev: any) => {
+                const copy = cloneDeep(prev)
+                delete copy[userId]
+                return { ...copy }
+            })
+        }
+
         socket.on('user-toggle-audio', handleToggleAudio)
         socket.on('user-toggle-video', handleToggleVideo)
+        socket.on('user-leave-room', handleUserLeaveRoom)
 
         return () => {
             socket.off('user-toggle-audio', handleToggleAudio)
             socket.off('user-toggle-video', handleToggleVideo)
+            socket.off('user-leave-room', handleUserLeaveRoom)
         }
-    }, [socket, setPlayers, players])
+    }, [socket, setPlayers, players, users])
 
     useEffect(() => {
         if(!peer || !stream) return;
@@ -93,6 +112,11 @@ const Room = () => {
                         muted: false,
                         playing: true,
                     }
+                }))
+
+                setUsers((prev: any) => ({
+                    ...prev,
+                    [callerId]: call
                 }))
             })
         })
@@ -129,7 +153,7 @@ const Room = () => {
                 )}
             </div>
 
-            <Control muted={players[myId]?.muted} playing={players[myId]?.playing} toggleAudio={toggleAudio} toggleVideo={toggleVideo} />
+            <Control muted={players[myId]?.muted} playing={players[myId]?.playing} toggleAudio={toggleAudio} toggleVideo={toggleVideo} leaveRoom={leaveRoom} />
         </div>
     )
 }
