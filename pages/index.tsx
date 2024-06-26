@@ -29,7 +29,7 @@ export default function Home() {
 
     const createAndJoinRoom = () => {
         const roomId = generateCustomID();
-        router.push(`/${roomId}`);
+        router.push(`/room/${roomId}`);
     }
 
     const joinRoom = () => {
@@ -38,7 +38,7 @@ export default function Home() {
             return;
         }
         
-        router.push(`/${roomId}`);
+        router.push(`/room/${roomId}`);
     }
 
     return (
