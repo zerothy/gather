@@ -1,21 +1,43 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import { v4 as uuid } from 'uuid';
 
 export default function Home() {
     const router = useRouter();
     const [roomId, setRoomId] = useState<string>('');
 
+
+    const generateRandomLetter = () => {
+        const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+        return alphabet[Math.floor(Math.random() * alphabet.length)];
+    }
+
+    const generateCustomID = () => {
+        const generateSection = (length: number) => {
+            let section = '';
+            for(let i = 0; i < length; i++){
+                section += generateRandomLetter();
+            }
+            return section;
+        }
+
+        const id1 = generateSection(3);
+        const id2 = generateSection(3);
+        const id3 = generateSection(3);
+
+        return `${id1}-${id2}-${id3}`;
+    }
+
     const createAndJoinRoom = () => {
-        const roomId = uuid();
+        const roomId = generateCustomID();
         router.push(`/${roomId}`);
     }
 
     const joinRoom = () => {
         if(!roomId){
-            alert('Please enter a room ID');
+            alert('Invalid Room ID');
             return;
         }
+        
         router.push(`/${roomId}`);
     }
 

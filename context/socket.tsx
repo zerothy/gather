@@ -14,19 +14,8 @@ export const SocketProvider = (props: any) => {
 
     useEffect(() => {
         const connection = io();
-    
         console.log('socket connected', connection);
         setSocket(connection);
-    
-        const handleError = async (err: Error) => {
-            console.log('Error establishing socket', err);
-        };
-    
-        connection.on('connect_error', handleError);
-    
-        return () => {
-            connection.off('connect_error', handleError);
-        };
     }, []);
 
     socket?.on('connect_error', async (err: Error) => {
