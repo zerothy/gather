@@ -18,6 +18,7 @@ export const SocketProvider = (props: any) => {
     useEffect(() => {
         const connection = io(URL, {
             path: '/api/socket',
+            transports: ['websocket', 'polling'],
         })
         console.log('socket connected', connection);
         setSocket(connection);
