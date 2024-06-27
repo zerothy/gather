@@ -17,11 +17,10 @@ export const SocketProvider = (props: any) => {
 
     useEffect(() => {
         const connection = io(URL, {
-            transports: ['websocket'],
+            transports: ['websocket', 'polling'],
             reconnection: true,
-            reconnectionDelay: 500,
-            reconnectionAttempts: 10,
-            reconnectionDelayMax: 5000,
+            reconnectionAttempts: 5,
+            path: '/api/socket',
         });
         console.log('socket connected', connection);
         setSocket(connection);
