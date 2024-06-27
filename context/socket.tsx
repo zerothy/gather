@@ -12,22 +12,16 @@ export const SocketProvider = (props: any) => {
     const { children } = props;
     const [socket, setSocket] = useState<any>(null);
 
-    const URL = "gather-black.vercel.app"
-    // const URL = "http://localhost:3000"
-
     useEffect(() => {
-        const connection = io(URL, {
-            path: '/api/socket',
-            transports: ['websocket', 'polling'],
-        })
+        const connection = io("https://gather-black.vercel.app/");
         console.log('socket connected', connection);
         setSocket(connection);
     }, []);
 
-    // socket?.on('connect_error', async (err: Error) => {
-    //     console.log('Error establishing socket', err)
-    //     await fetch('/api/socket')
-    // })
+    socket?.on('connect_error', async (err: Error) => {
+        console.log('Error establishing socket', err)
+        await fetch('/api/socket')
+    })
 
     return (
         <SocketContext.Provider value={socket}>

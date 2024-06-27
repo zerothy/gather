@@ -6,13 +6,10 @@ const SocketHandler = (req: any, res: any) => {
         console.log('already connected');
     }else{
         const io = new Server(res.socket.server, {
-            path: '/api/socket',
-            wsEngine: ['ws', 'wss'],
-            transports: ['websocket', 'polling'],
             cors: {
                 origin: '*',
+                methods: ['GET', 'POST'],
             },
-            allowEIO3: true,
         });
         res.socket.server.io = io;
     
@@ -53,6 +50,8 @@ const SocketHandler = (req: any, res: any) => {
         io.on('disconnect', (socket) => {
             console.log('server is disconnected');
         });
+
+        io.listen(res.socket.server);
     }
 
     res.end();
