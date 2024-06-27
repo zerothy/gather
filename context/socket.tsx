@@ -12,8 +12,17 @@ export const SocketProvider = (props: any) => {
     const { children } = props;
     const [socket, setSocket] = useState<any>(null);
 
+    const URL = 'https://gather-black.vercel.app/';
+    // const URL = 'http://localhost:3000/';
+
     useEffect(() => {
-        const connection = io();
+        const connection = io(URL, {
+            transports: ['websocket'],
+            reconnection: true,
+            reconnectionDelay: 500,
+            reconnectionAttempts: 10,
+            reconnectionDelayMax: 5000,
+        });
         console.log('socket connected', connection);
         setSocket(connection);
     }, []);
