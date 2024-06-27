@@ -12,11 +12,17 @@ export const SocketProvider = (props: any) => {
     const { children } = props;
     const [socket, setSocket] = useState<any>(null);
 
-    useEffect(() => {
+    const socketInit = async () => {
+        await fetch('/api/socket')
         const connection = io();
         console.log('socket connected', connection);
         setSocket(connection);
+    }
+
+    useEffect(() => {
+        socketInit();
     }, []);
+
 
     socket?.on('connect_error', async (err: Error) => {
         console.log('Error establishing socket', err)

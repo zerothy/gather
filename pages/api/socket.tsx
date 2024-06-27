@@ -5,12 +5,7 @@ const SocketHandler = (req: any, res: any) => {
     if(res.socket.server.io) {
         console.log('already connected');
     }else{
-        const http = require('http')
-        const server = http.createServer((req: any, res: any) => {
-            res.write('socket.io server');
-            res.end();
-        });
-        const io = new Server(server, {
+        const io = new Server(res.socket.server, {
             cors: {
                 origin: '*',
                 methods: ['GET', 'POST'],
@@ -56,7 +51,6 @@ const SocketHandler = (req: any, res: any) => {
             console.log('server is disconnected');
         });
 
-        server.listen(3001);
     }
 
     res.end();
