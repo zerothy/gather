@@ -13,7 +13,7 @@ export const SocketProvider = (props: any) => {
     const [socket, setSocket] = useState<any>(null);
 
     useEffect(() => {
-        const connection = io("https://gather-black.vercel.app/");
+        const connection = io();
         console.log('socket connected', connection);
         setSocket(connection);
     }, []);
