@@ -12,15 +12,12 @@ export const SocketProvider = (props: any) => {
     const { children } = props;
     const [socket, setSocket] = useState<any>(null);
 
-    const URL = 'https://gather-black.vercel.app/';
-    // const URL = 'http://localhost:3000/';
+    const URL = "https://gather-black.vercel.app"
+    // const URL = "http://localhost:3000"
 
     useEffect(() => {
         const connection = io(URL, {
             transports: ['websocket', 'polling'],
-            reconnection: true,
-            reconnectionAttempts: 5,
-            path: '/api/socket',
         });
         console.log('socket connected', connection);
         setSocket(connection);
