@@ -1,6 +1,14 @@
 import ReactPlayer from "react-player";
+import { useEffect, useRef } from "react";
 
 const Player = ({ url, muted, playing }: { url: any, muted: any, playing: any }) => {
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    useEffect(() => {
+        if (videoRef.current) {
+            videoRef.current.srcObject = url;
+        }
+    }, [url]);
 
     return (
         <div>

@@ -41,9 +41,7 @@ const Room = () => {
         const handleUserConnected = (newUser: any) => {
             console.log("New user connected with id", newUser)
 
-            console.log('calling', newUser)
             const call = peer.call(newUser, stream)
-            console.log('call:', call)
 
             call.on("stream", (userStream) => {
                 console.log("Stream received from", newUser)
